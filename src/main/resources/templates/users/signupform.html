@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>회원가입 페이지</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #5cb85c;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #4cae4c;
+        }
+
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+<form th:action="@{/api/users/signup}" th:object="${user}" method="post">
+    <h1>회원가입 페이지</h1>
+    <hr/>
+
+    <label for="username">아이디</label>
+    <input type="text" th:field="*{username}" placeholder="아이디" required/>
+
+    <label for="nickname">닉네임</label>
+    <input type="text" th:field="*{nickname}" placeholder="닉네임" required/>
+
+    <label for="password">비밀번호</label>
+    <input type="password" th:field="*{password}" placeholder="비밀번호" required/>
+
+    <label for="passwordcheck">비밀번호 확인</label>
+    <input type="password" th:field="*{passwordCheck}" placeholder="비밀번호 확인" required/>
+
+    <div th:if="${errors != null && !errors.isEmpty()}" class="error">
+        <ul>
+            <li th:each="err : ${errors}" th:text="${err}"></li>
+        </ul>
+    </div>
+
+    <button type="submit">회원가입</button>
+</form>
+</body>
+</html>
