@@ -16,6 +16,17 @@
 
 <h1>[[${user.nickname}]]님, 환영합니다!</h1>
 
+<div class="container">
+    <div>
+        <h1>Hello Spring</h1>
+        <p>회원 기능</p>
+        <p>
+            <a href="/logout">로그 아웃/a>
+            <a href="/members">내 정보 조회</a>
+        </p>
+    </div>
+</div> <!-- /container -->
+
 <form th:action="@{/api/users/logout}" method="post">
     <button type="submit">로그아웃</button>
 </form>
