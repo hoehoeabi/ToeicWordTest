@@ -1,5 +1,6 @@
-package com.example.toeicwordtest.global.security;
+package com.example.toeicwordtest.global.config;
 
+import com.example.toeicwordtest.global.security.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
