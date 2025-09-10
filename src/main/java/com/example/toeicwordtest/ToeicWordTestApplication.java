@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class ToeicWordTestApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(ToeicWordTestApplication.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(ToeicWordTestApplication.class, args);
+	}
 
 }

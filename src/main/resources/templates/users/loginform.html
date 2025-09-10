@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>로그인 페이지</title>
+</head>
+<body>
+<h1>로그인 페이지</h1>
+<hr/>
+<div th:if="${param.error}">
+    <p class="error">아이디 또는 비밀번호가 올바르지 않습니다.</p>
+</div>
+<!-- 시큐리티는 x-www-form-url-encoded 타입만 인식 -->
+<form th:action="@{/api/users/login}" method="post">
+    <input type="text" name="username" placeholder="아이디"/>
+    <input type="password" name="password" placeholder="비밀번호"/>
+    <button>로그인</button>
+</form>
+<a href="/api/users/signup">회원가입</a>
+</body>
+</html>
