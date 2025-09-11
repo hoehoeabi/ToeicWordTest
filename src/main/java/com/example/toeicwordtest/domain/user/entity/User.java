@@ -2,10 +2,9 @@ package com.example.toeicwordtest.domain.user.entity;
 
 import com.example.toeicwordtest.domain.chapter.entity.Chapter;
 import com.example.toeicwordtest.domain.role.entity.Role;
-import com.example.toeicwordtest.domain.wrongnote.entity.WrongNote;
+import com.example.toeicwordtest.domain.wrongnote.entity.WrongNoteEntry;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -16,6 +15,9 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 @Getter @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     @Id
@@ -33,18 +35,22 @@ public class User {
     private String password;
 
     @Column(name = "registrationDate", nullable = false)
+    @Builder.Default
     private LocalDateTime registrationDate  = LocalDateTime.now();
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @Builder.Default
     private Set<Role> roles = new HashSet<>();
 
     // mappedBy에는 조인할 테이블에서 조인할 객체?의 변수명을 적는거임
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<Chapter> chapters = new ArrayList<>();
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private WrongNote wrongNote;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @Builder.Default // Builder 사용 시 초기화 누락 방지
+    private List<WrongNoteEntry> wrongNoteEntries = new ArrayList<>();
 }
