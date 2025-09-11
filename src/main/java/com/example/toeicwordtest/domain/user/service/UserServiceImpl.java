@@ -31,13 +31,17 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("이미 사용 중인 닉네임입니다.");
         }
 
-        Role role = roleRepository.findByName(userDto.getUsername().equals("admin") ? "ADMIN" : "USER");
+        String roleName = userDto.getUsername().equals("admin") ? "ADMIN" : "USER";
+        Role role = roleRepository.findByName(roleName)
+                .orElseThrow(() -> new RuntimeException(roleName + " 역할을 찾을 수 없습니다."));
 
-        User user = new User();
-        user.setRoles(Collections.singleton(role));
-        user.setUsername(userDto.getUsername());
-        user.setUsername(userDto.getUsername());
-        user.setNickname(userDto.getNickname());
+        User user = User.builder()
+                .username(userDto.getUsername())
+                .nickname(userDto.getNickname())
+                .password(passwordEncoder.encode(userDto.getPassword()))
+                .roles(Collections.singleton(role))
+                .build();
+
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
         userRepository.save(user);
