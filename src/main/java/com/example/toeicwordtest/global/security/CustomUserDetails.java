@@ -23,8 +23,8 @@ public class CustomUserDetails implements UserDetails {
         this.password = password;
         this.nickname = nickname;
         this.authorities = roles.stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
-                .collect(Collectors.toSet());
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getRoleName()))
+                .collect(Collectors.toList());
     }
 
     @Override
