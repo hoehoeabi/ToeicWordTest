@@ -46,7 +46,7 @@ public class User {
     private Set<Role> roles = new HashSet<>();
 
     // mappedBy에는 조인할 테이블에서 조인할 객체?의 변수명을 적는거임
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.LAZY)
     @Builder.Default
     private List<Chapter> chapters = new ArrayList<>();
 
