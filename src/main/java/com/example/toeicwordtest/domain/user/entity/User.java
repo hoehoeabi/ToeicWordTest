@@ -48,6 +48,9 @@ public class User {
 
     // mappedBy에는 조인할 테이블에서 조인할 객체?의 변수명을 적는거임
     // (주인이 아닌쪽이 mappedBy를 가짐."니가 가지고 있는 그 외래키 주인이 누구야?->Chapter요" 그래서 Chapter가 주인인거임)
+    // 사실 챕터쪽은 일반적으로 비즈니스적인 관점에서, "특정 유저의 특정 챕터 이름"은 그 챕터를 고유하게 식별할 수 있는 자연 키(Natural Key)가 될 수 있다.
+    // 하지만 위의 경우 복합키하나 때문에
+    // 식별자 클래스도 만들어야 하고 구조가 복잡해 지기에 대리키를 기본키로 사용하고 cascade = CascadeType.ALL를 설정 해준다
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.LAZY)
     @Builder.Default // 이게 있어야 빌더 만들때 값을 안넣은 상태에서 get해도 null이 아니라 빈 ArrayList가 나옴
     private List<Chapter> chapters = new ArrayList<>();
