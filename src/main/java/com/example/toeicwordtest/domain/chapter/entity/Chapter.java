@@ -25,7 +25,7 @@ public class Chapter {
     private int chapterNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id") // 'chapter' 테이블에 'user_id' 외래 키(FK)를 생성합니다.
+    @JoinColumn(name = "user_id") // 'chapter' 테이블에 'user_id' 외래 키(FK)를 생성합니다.(이 외래키의 주인은 나야)
     private User user;
 
 
