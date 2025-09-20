@@ -1,8 +1,8 @@
-package com.example.toeicwordtest.domain.user.entity;
+package com.example.toeicwordtest.auth.user.entity;
 
-import com.example.toeicwordtest.domain.chapter.entity.Chapter;
-import com.example.toeicwordtest.domain.role.entity.Role;
-import com.example.toeicwordtest.domain.wrongnote.entity.WrongNoteEntry;
+import com.example.toeicwordtest.vocabulary.chapter.entity.Chapter;
+import com.example.toeicwordtest.auth.role.entity.Role;
+import com.example.toeicwordtest.vocabulary.wrongnote.entity.WrongNoteEntry;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,7 +35,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(name = "registrationDate", nullable = false)
+    @Column(name = "registration_date", nullable = false)
     @Builder.Default
     private LocalDateTime registrationDate  = LocalDateTime.now();
 
@@ -83,13 +83,9 @@ public class User {
         // 2. Chapter의 user 필드에 User를 설정 (Chapter.setUser() 호출)
         //    이때 Chapter.setUser() 내부에서 다시 User.addChapter()를 호출하지 않도록 방지 로직 필요
         if (chapter.getUser() != this) { // Chapter가 아직 이 User를 참조하고 있지 않다면
-            chapter.addUser(this); // Chapter가 자신의 user 필드를 설정 (이때 Chapter.setUser의 내부 로직이 중요)
+            chapter.setUser(this); // Chapter가 자신의 user 필드를 설정 (이때 Chapter.setUser의 내부 로직이 중요)
         }
     }
-
-    /**
-     * User가 WrongNoteEntry를 추가할 때 사용합니다.
-     */
 
     public void addWrongNoteEntry(WrongNoteEntry wrongNoteEntry) {
         if (wrongNoteEntry != null && !this.wrongNoteEntries.contains(wrongNoteEntry)) {

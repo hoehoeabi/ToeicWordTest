@@ -1,6 +1,6 @@
-package com.example.toeicwordtest.domain.user.repository;
+package com.example.toeicwordtest.auth.user.repository;
 
-import com.example.toeicwordtest.domain.user.entity.User;
+import com.example.toeicwordtest.auth.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

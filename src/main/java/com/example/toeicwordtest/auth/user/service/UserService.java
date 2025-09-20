@@ -1,7 +1,7 @@
-package com.example.toeicwordtest.domain.user.service;
+package com.example.toeicwordtest.auth.user.service;
 
-import com.example.toeicwordtest.domain.user.dto.UserDto;
-import com.example.toeicwordtest.domain.user.entity.User;
+import com.example.toeicwordtest.auth.user.dto.UserDto;
+import com.example.toeicwordtest.auth.user.entity.User;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -13,5 +13,5 @@ public interface UserService {
 
     Optional<User> findByUsername(String username);
 
-    void deleteUser(String email);
+    void deleteUser(String username);
 }

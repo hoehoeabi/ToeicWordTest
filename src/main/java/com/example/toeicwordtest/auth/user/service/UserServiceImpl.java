@@ -1,10 +1,10 @@
-package com.example.toeicwordtest.domain.user.service;
+package com.example.toeicwordtest.auth.user.service;
 
-import com.example.toeicwordtest.domain.role.entity.Role;
-import com.example.toeicwordtest.domain.role.repository.RoleRepository;
-import com.example.toeicwordtest.domain.user.dto.UserDto;
-import com.example.toeicwordtest.domain.user.entity.User;
-import com.example.toeicwordtest.domain.user.repository.UserRepository;
+import com.example.toeicwordtest.auth.role.entity.Role;
+import com.example.toeicwordtest.auth.role.repository.RoleRepository;
+import com.example.toeicwordtest.auth.user.dto.UserDto;
+import com.example.toeicwordtest.auth.user.entity.User;
+import com.example.toeicwordtest.auth.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
         }
 
         String roleName = userDto.getUsername().equals("admin") ? "ADMIN" : "USER";
-        Role role = roleRepository.findByName(roleName)
+        Role role = roleRepository.findByRoleName(roleName)
                 .orElseThrow(() -> new RuntimeException(roleName + " 역할을 찾을 수 없습니다."));
 
         User user = User.builder()
@@ -42,7 +42,6 @@ public class UserServiceImpl implements UserService {
                 .roles(Collections.singleton(role))
                 .build();
 
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
         userRepository.save(user);
     }

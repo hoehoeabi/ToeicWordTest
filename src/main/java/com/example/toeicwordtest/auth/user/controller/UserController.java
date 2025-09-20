@@ -1,8 +1,8 @@
-package com.example.toeicwordtest.domain.user.controller;
+package com.example.toeicwordtest.auth.user.controller;
 
-import com.example.toeicwordtest.domain.user.dto.UserDto;
-import com.example.toeicwordtest.domain.user.entity.User;
-import com.example.toeicwordtest.domain.user.service.UserServiceImpl;
+import com.example.toeicwordtest.auth.user.dto.UserDto;
+import com.example.toeicwordtest.auth.user.entity.User;
+import com.example.toeicwordtest.auth.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -24,7 +24,7 @@ import java.util.Optional;
 @Slf4j
 public class UserController {
 
-    private final UserServiceImpl userServiceImpl;
+    private final UserService userService;
 
     @GetMapping("/signup")
     public String signup(Model model) {
@@ -42,7 +42,7 @@ public class UserController {
 
         if (errors.isEmpty()) {
             try {
-                userServiceImpl.signUp(userDto);
+                userService.signUp(userDto);
             } catch (IllegalArgumentException e) {
                 errors.add(e.getMessage());
             }
@@ -67,7 +67,7 @@ public class UserController {
     public String index(Model model, Authentication authentication) {
 
         String username = authentication.getName();
-        Optional<User> userOptional = userServiceImpl.findByUsername(username);
+        Optional<User> userOptional = userService.findByUsername(username);
         if (userOptional.isPresent()) {
             model.addAttribute("user", userOptional.get());
             return "users/home";

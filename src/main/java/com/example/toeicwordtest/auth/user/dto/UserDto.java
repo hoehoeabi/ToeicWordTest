@@ -1,6 +1,5 @@
-package com.example.toeicwordtest.domain.user.dto;
+package com.example.toeicwordtest.auth.user.dto;
 
-import com.example.toeicwordtest.domain.user.entity.User;
 import lombok.*;
 
 @Getter

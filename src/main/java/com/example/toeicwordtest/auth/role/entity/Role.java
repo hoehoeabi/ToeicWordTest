@@ -1,4 +1,4 @@
-package com.example.toeicwordtest.domain.role.entity;
+package com.example.toeicwordtest.auth.role.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -21,7 +21,7 @@ public class Role {
     @Column(nullable = false)
     private String roleName;
 
-    public Role(String name) {
-        this.roleName = name;
+    public Role(String roleName) {
+        this.roleName = roleName;
     }
 }

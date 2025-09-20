@@ -1,8 +1,8 @@
 package com.example.toeicwordtest.domain.user.service;
 
-import com.example.toeicwordtest.domain.user.dto.UserDto;
-import com.example.toeicwordtest.domain.user.entity.User;
-import com.example.toeicwordtest.domain.user.service.UserService;
+import com.example.toeicwordtest.auth.user.dto.UserDto;
+import com.example.toeicwordtest.auth.user.entity.User;
+import com.example.toeicwordtest.auth.user.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
