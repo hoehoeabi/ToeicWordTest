@@ -1,8 +1,8 @@
-package com.example.toeicwordtest.vocabulary.wrongnote.repository;
+package com.example.toeicwordtest.vocabulary.domain.wrongnote.repository;
 
 import com.example.toeicwordtest.auth.user.entity.User;
-import com.example.toeicwordtest.vocabulary.word.entity.Word;
-import com.example.toeicwordtest.vocabulary.wrongnote.entity.WrongNoteEntry;
+import com.example.toeicwordtest.vocabulary.domain.word.entity.Word;
+import com.example.toeicwordtest.vocabulary.domain.wrongnote.entity.WrongNoteEntry;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
-// import java.util.Optional; // Optional 임포트 필요 없음
 
 @Repository
 public interface WrongNoteEntryRepository extends JpaRepository<WrongNoteEntry, Long> {

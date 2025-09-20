@@ -3,7 +3,7 @@ package com.example.toeicwordtest.vocabulary.controller;
 import com.example.toeicwordtest.global.security.CustomUserDetails;
 import com.example.toeicwordtest.vocabulary.dto.ChapterDto;
 import com.example.toeicwordtest.vocabulary.service.ChapterService;
-import com.example.toeicwordtest.vocabulary.wrongnote.service.WrongNoteService;
+import com.example.toeicwordtest.vocabulary.service.WrongNoteService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

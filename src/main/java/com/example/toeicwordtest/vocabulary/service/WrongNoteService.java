@@ -1,18 +1,17 @@
-package com.example.toeicwordtest.vocabulary.wrongnote.service;
+package com.example.toeicwordtest.vocabulary.service;
 
 import com.example.toeicwordtest.auth.user.entity.User;
 import com.example.toeicwordtest.auth.user.repository.UserRepository;
 import com.example.toeicwordtest.vocabulary.dto.ChapterDto;
 import com.example.toeicwordtest.vocabulary.dto.WordDto;
 import com.example.toeicwordtest.vocabulary.mapper.VocabularyMapper;
-import com.example.toeicwordtest.vocabulary.word.entity.Word;
-import com.example.toeicwordtest.vocabulary.wrongnote.entity.WrongNoteEntry;
-import com.example.toeicwordtest.vocabulary.wrongnote.repository.WrongNoteEntryRepository;
+import com.example.toeicwordtest.vocabulary.domain.word.entity.Word;
+import com.example.toeicwordtest.vocabulary.domain.wrongnote.entity.WrongNoteEntry;
+import com.example.toeicwordtest.vocabulary.domain.wrongnote.repository.WrongNoteEntryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 

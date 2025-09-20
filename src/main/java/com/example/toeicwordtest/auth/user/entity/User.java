@@ -1,8 +1,8 @@
 package com.example.toeicwordtest.auth.user.entity;
 
-import com.example.toeicwordtest.vocabulary.chapter.entity.Chapter;
+import com.example.toeicwordtest.vocabulary.domain.chapter.entity.Chapter;
 import com.example.toeicwordtest.auth.role.entity.Role;
-import com.example.toeicwordtest.vocabulary.wrongnote.entity.WrongNoteEntry;
+import com.example.toeicwordtest.vocabulary.domain.wrongnote.entity.WrongNoteEntry;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;

@@ -1,7 +1,7 @@
-package com.example.toeicwordtest.vocabulary.word.entity;
+package com.example.toeicwordtest.vocabulary.domain.word.entity;
 
-import com.example.toeicwordtest.vocabulary.chapter.entity.Chapter;
-import com.example.toeicwordtest.vocabulary.wrongnote.entity.WrongNoteEntry;
+import com.example.toeicwordtest.vocabulary.domain.chapter.entity.Chapter;
+import com.example.toeicwordtest.vocabulary.domain.wrongnote.entity.WrongNoteEntry;
 import jakarta.persistence.*;
 import lombok.*;
 

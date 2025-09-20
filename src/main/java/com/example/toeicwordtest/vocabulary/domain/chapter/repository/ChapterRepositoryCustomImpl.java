@@ -1,6 +1,6 @@
-package com.example.toeicwordtest.vocabulary.chapter.repository;
+package com.example.toeicwordtest.vocabulary.domain.chapter.repository;
 
-import com.example.toeicwordtest.vocabulary.chapter.entity.Chapter;
+import com.example.toeicwordtest.vocabulary.domain.chapter.entity.Chapter;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

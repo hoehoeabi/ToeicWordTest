@@ -1,7 +1,7 @@
-package com.example.toeicwordtest.vocabulary.chapter.entity;
+package com.example.toeicwordtest.vocabulary.domain.chapter.entity;
 
 import com.example.toeicwordtest.auth.user.entity.User;
-import com.example.toeicwordtest.vocabulary.word.entity.Word;
+import com.example.toeicwordtest.vocabulary.domain.word.entity.Word;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,10 +24,10 @@ public class Chapter {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false) // unique = true 제거
+    @Column(nullable = false) // unique = true 제거 -> 각 사용자 별로 같은 챕터 번호 사용 가능
     private int chapterNumber;
 
-    @Column(nullable = false, length = 100) // ★ 챕터 제목 필드 추가 (nullable = false로 필수)
+    @Column(nullable = false, length = 100)
     private String title;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -39,10 +39,9 @@ public class Chapter {
     private List<Word> words = new ArrayList<>();
 
     // == 연관 관계 편의 메서드 == //
-    // Chapter가 ManyToOne의 주인이므로, User 엔티티를 설정하는 메서드는 setUser가 적절합니다.
     public void setUser(User user) {
         if (this.user != user) {
-            // 기존 User와의 관계 끊기 (User 엔티티에 removeChapter 메서드를 추가할 수도 있음)
+            // 기존 User와의 관계 끊기
             if (this.user != null) {
                 this.user.getChapters().remove(this); // 기존 유저 컬렉션에서 자신을 제거
             }
@@ -67,21 +66,29 @@ public class Chapter {
     public void removeWord(Word word) {
         if (word != null && this.words.contains(word)) {
             this.words.remove(word);
-            // orphanRemoval = true 덕분에 DB에서 Word 엔티티는 자동으로 삭제됩니다.
-            // 하지만 객체 상의 관계를 끊기 위해 Word 쪽에서도 chapter를 null로 설정하는 것이 명시적입니다.
+            // orphanRemoval = true 덕분에 DB에서 Word 엔티티는 자동으로 삭제.
+            // 하지만 객체 상의 관계를 끊기 위해 Word 쪽에서도 chapter를 null로 설정하는 것이 명시적.
             word.setChapter(null);
         }
     }
 
     // == 비즈니스 로직 메서드 == //
     /**
-     * 챕터의 세부 정보를 업데이트합니다. (chapterNumber와 title 변경)
+     * 챕터의 세부 정보를 업데이트. (chapterNumber와 title 변경)
      */
     public void updateChapterDetails(int chapterNumber, String title) {
         this.chapterNumber = chapterNumber;
         this.title = title;
     }
 
+
+    /*
+    fetchJoin과 distinct를 사용해서 챕터와 단어를 조회할 때,
+    JPA는 내부적으로 여러 Chapter와 Word 객체를 메모리에 만들게 됩니다.
+    이때 equals() 기준이 없으면, JPA는 ID가 1인 Chapter 객체가 여러 개 있어도
+    모두 '다른' 객체라고 착각합니다. 그 결과, 중복을 제거하고 객체들을 조합하는 과정에서
+    words 컬렉션에 단어들을 제대로 담아주지 못하는 오류 함.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

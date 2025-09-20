@@ -1,11 +1,9 @@
 package com.example.toeicwordtest.vocabulary.dto;
 
-import com.example.toeicwordtest.vocabulary.chapter.entity.Chapter;
 import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter

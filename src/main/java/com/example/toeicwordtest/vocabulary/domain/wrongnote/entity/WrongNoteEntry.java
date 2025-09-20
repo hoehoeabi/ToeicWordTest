@@ -1,11 +1,9 @@
-package com.example.toeicwordtest.vocabulary.wrongnote.entity;
+package com.example.toeicwordtest.vocabulary.domain.wrongnote.entity;
 
 import com.example.toeicwordtest.auth.user.entity.User;
-import com.example.toeicwordtest.vocabulary.word.entity.Word;
+import com.example.toeicwordtest.vocabulary.domain.word.entity.Word;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "wrong_note_entry")

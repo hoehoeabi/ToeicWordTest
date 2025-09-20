@@ -1,9 +1,9 @@
 package com.example.toeicwordtest.vocabulary.mapper;
 
-import com.example.toeicwordtest.vocabulary.chapter.entity.Chapter;
+import com.example.toeicwordtest.vocabulary.domain.chapter.entity.Chapter;
 import com.example.toeicwordtest.vocabulary.dto.ChapterDto;
 import com.example.toeicwordtest.vocabulary.dto.WordDto;
-import com.example.toeicwordtest.vocabulary.word.entity.Word;
+import com.example.toeicwordtest.vocabulary.domain.word.entity.Word;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

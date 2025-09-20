@@ -1,8 +1,8 @@
 // src/main/java/com/example/toeicwordtest/vocabulary/chapter/repository/ChapterRepository.java
-package com.example.toeicwordtest.vocabulary.chapter.repository;
+package com.example.toeicwordtest.vocabulary.domain.chapter.repository;
 
 import com.example.toeicwordtest.auth.user.entity.User;
-import com.example.toeicwordtest.vocabulary.chapter.entity.Chapter;
+import com.example.toeicwordtest.vocabulary.domain.chapter.entity.Chapter;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

@@ -2,12 +2,12 @@ package com.example.toeicwordtest.vocabulary.service;
 
 import com.example.toeicwordtest.auth.user.entity.User;
 import com.example.toeicwordtest.auth.user.repository.UserRepository;
-import com.example.toeicwordtest.vocabulary.chapter.entity.Chapter;
-import com.example.toeicwordtest.vocabulary.chapter.repository.ChapterRepository;
+import com.example.toeicwordtest.vocabulary.domain.chapter.entity.Chapter;
+import com.example.toeicwordtest.vocabulary.domain.chapter.repository.ChapterRepository;
 import com.example.toeicwordtest.vocabulary.dto.ChapterDto;
 import com.example.toeicwordtest.vocabulary.dto.WordDto;
 import com.example.toeicwordtest.vocabulary.mapper.VocabularyMapper;
-import com.example.toeicwordtest.vocabulary.word.entity.Word;
+import com.example.toeicwordtest.vocabulary.domain.word.entity.Word;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
