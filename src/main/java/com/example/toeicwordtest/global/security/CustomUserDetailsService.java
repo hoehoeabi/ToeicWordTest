@@ -1,8 +1,8 @@
 package com.example.toeicwordtest.global.security;
 
-import com.example.toeicwordtest.domain.role.entity.Role;
-import com.example.toeicwordtest.domain.user.entity.User;
-import com.example.toeicwordtest.domain.user.repository.UserRepository;
+import com.example.toeicwordtest.auth.role.entity.Role;
+import com.example.toeicwordtest.auth.user.entity.User;
+import com.example.toeicwordtest.auth.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -35,6 +35,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         Set<Role> roles = foundUser.getRoles();
 
         return new CustomUserDetails(
+                foundUser.getId(),
                 foundUser.getUsername(),
                 foundUser.getPassword(),
                 foundUser.getNickname(),
