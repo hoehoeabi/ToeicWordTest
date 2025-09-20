@@ -6,13 +6,11 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "word")
-@Getter @Setter
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,7 +21,7 @@ public class Word {
     @Column(name = "word_id")
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String spelling;
 
     @Column(nullable = false)
@@ -39,4 +37,30 @@ public class Word {
     @OneToMany(mappedBy = "word", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @Builder.Default // Builder 사용 시 초기화 누락 방지
     private List<WrongNoteEntry> wrongNoteEntries = new ArrayList<>();
+
+    // == 연관 관계 편의 메서드 == //
+
+    public void setChapter(Chapter chapter) {
+        if (this.chapter != chapter) {
+            if (this.chapter != null) {
+                this.chapter.getWords().remove(this);
+            }
+            this.chapter = chapter;
+            if (chapter != null) {
+                chapter.getWords().add(this);
+            }
+        }
+    }
+
+    public void addWrongNoteEntry(WrongNoteEntry wrongNoteEntry) {
+        if (wrongNoteEntry != null && !this.wrongNoteEntries.contains(wrongNoteEntry)) {
+            // 이 Word의 wrongNoteEntries 리스트에 WrongNoteEntry를 추가
+            this.wrongNoteEntries.add(wrongNoteEntry);
+            // WrongNoteEntry가 관계의 주인이므로 WrongNoteEntry 쪽에서도 관계를 설정해줘야 함
+            // WrongNoteEntry의 setWord 메서드 안에서 이 Word의 컬렉션에 자신을 추가하는 로직 포함
+            if (wrongNoteEntry.getWord() != this) {
+                wrongNoteEntry.setWord(this);
+            }
+        }
+    }
 }
