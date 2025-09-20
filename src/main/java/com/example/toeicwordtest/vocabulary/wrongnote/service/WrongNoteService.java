@@ -25,20 +25,22 @@ public class WrongNoteService {
     private final VocabularyMapper vocabularyMapper;
 
     public void addWrongNoteEntry(User user, Word word) {
-        WrongNoteEntry entry = WrongNoteEntry.builder()
-                .user(user)
-                .word(word)
-                .build();
+        if (!wrongNoteEntryRepository.existsByUserAndWord(user, word)) {
+            WrongNoteEntry entry = WrongNoteEntry.builder()
+                    .user(user)
+                    .word(word)
+                    .build();
 
-        if (user != null) { // user가 null이 아닐 때만 관계 설정 시도
-            user.addWrongNoteEntry(entry);
+            if (user != null) { // user가 null이 아닐 때만 관계 설정 시도
+                user.addWrongNoteEntry(entry);
+            }
+
+            if (word != null) { // word가 null이 아닐 때만 관계 설정 시도
+                word.addWrongNoteEntry(entry);
+            }
+
+            wrongNoteEntryRepository.save(entry);
         }
-
-        if (word != null) { // word가 null이 아닐 때만 관계 설정 시도
-            word.addWrongNoteEntry(entry);
-        }
-
-        wrongNoteEntryRepository.save(entry);
     }
 
     // ★ 틀린 단어 목록에서 맞춘 단어 제거

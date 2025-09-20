@@ -26,4 +26,7 @@ public interface WrongNoteEntryRepository extends JpaRepository<WrongNoteEntry, 
     // 특정 유저의 오답노트 개수를 세는 쿼리
     long countByUser(User user);
 
+    // 특정 유저와 단어에 대한 오답 기록이 존재하는지 확인
+    boolean existsByUserAndWord(User user, Word word);
+
 }
