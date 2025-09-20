@@ -1,6 +1,6 @@
-package com.example.toeicwordtest.domain.word.repository;
+package com.example.toeicwordtest.vocabulary.word.repository;
 
-import com.example.toeicwordtest.domain.word.entity.Word;
+import com.example.toeicwordtest.vocabulary.word.entity.Word;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
