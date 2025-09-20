@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>시험 결과</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body { padding-top: 20px; background-color: #f8f9fa; }
+        .container { max-width: 800px; margin-top: 30px; background-color: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center; }
+        h1 { color: #007bff; margin-bottom: 30px; font-weight: 600; }
+        .result-summary { margin-bottom: 20px; font-size: 1.1em; }
+        .result-summary p { margin-bottom: 5px; }
+        .score { font-size: 2em; font-weight: bold; color: #28a745; }
+        .wrong-answers-section { text-align: left; margin-top: 40px; }
+        .wrong-answers-section h3 { color: #dc3545; margin-bottom: 20px; border-bottom: 2px solid #dc3545; padding-bottom: 10px; }
+        .wrong-item { background-color: #f8d7da; border: 1px solid #f5c6cb; border-radius: 5px; padding: 15px; margin-bottom: 10px; }
+        .wrong-item p { margin-bottom: 5px; }
+        .wrong-item strong { color: #dc3545; }
+        .correct-answer { color: #28a745; }
+        .user-answer { color: #ffc107; }
+        .btn-group-custom { margin-top: 30px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>시험 결과</h1>
+    <hr/>
+
+    <div class="result-summary">
+        <p>총 문제 수: <span th:text="${examResult.totalQuestions}"></span>개</p>
+        <p>맞은 문제 수: <span th:text="${examResult.correctAnswers}" class="score"></span>개</p>
+        <p>틀린 문제 수: <span th:text="${examResult.wrongAnswers}"></span>개</p>
+        <p>시험 유형: <span th:text="${examResult.examType == 'SPELLING' ? '뜻 보고 철자 맞추기' : '철자 보고 뜻 맞추기'}"></span></p>
+    </div>
+
+    <div th:if="${!#lists.isEmpty(examResult.wrongAnswerDetails)}" class="wrong-answers-section">
+        <h3>틀린 단어</h3>
+        <div th:each="detail : ${examResult.wrongAnswerDetails}" class="wrong-item">
+            <p><strong>단어:</strong> <span th:text="${detail.spelling}"></span></p>
+            <p><strong>뜻:</strong> <span th:text="${detail.meaning}"></span></p>
+            <p><strong>제출한 답변:</strong> <span class="user-answer" th:text="${detail.userAnswer}"></span></p>
+            <p><strong>정답:</strong> <span class="correct-answer" th:text="${detail.correctAnswer}"></span></p>
+        </div>
+    </div>
+    <div th:unless="${!#lists.isEmpty(examResult.wrongAnswerDetails)}" class="alert alert-success mt-4">
+        <p>🎉 모든 문제를 맞추셨습니다! 대단해요!</p>
+    </div>
+
+    <div class="btn-group-custom">
+        <a href="/vocabulary/exam/select-chapters" class="btn btn-primary btn-lg">다른 시험 보기</a>
+        <a href="/vocabulary/chapters" class="btn btn-info btn-lg ml-2">내 챕터 목록</a>
+        <a href="/api/users/home" class="btn btn-secondary btn-lg ml-2">홈으로</a>
+    </div>
+</div>
+</body>
+</html>

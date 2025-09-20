@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>내 챕터 목록</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body { padding-top: 20px; }
+        .container { max-width: 800px; }
+        .chapter-item { border: 1px solid #dee2e6; margin-bottom: 10px; padding: 15px; border-radius: 5px; background-color: #fff; }
+        .chapter-title { font-size: 1.25em; font-weight: bold; color: #007bff; }
+        .chapter-number { color: #6c757d; margin-left: 10px; }
+        .word-count { font-size: 0.9em; color: #5a6268; margin-top: 5px; }
+        .btn-group-custom { margin-top: 15px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2 class="mb-4">내 챕터 목록</h2>
+    <div class="mb-3">
+        <a href="/vocabulary/chapters/new" class="btn btn-success">새 챕터 등록</a>
+        <a href="/api/users/home" class="btn btn-secondary ml-2">홈으로</a>
+    </div>
+
+    <div th:if="${#lists.isEmpty(chapters)}" class="alert alert-info">...</div>
+
+    <div th:each="chapter : ${chapters}" class="chapter-item"
+         th:classappend="${chapter.id == 0} ? 'wrong-note-chapter' : ''">
+        <p class="mb-1">
+            <a th:href="${chapter.id == 0} ? @{/vocabulary/wrong-notes} : @{/vocabulary/chapters/{id}(id=${chapter.id})}"
+               class="chapter-title" th:text="${chapter.title}"></a>
+            <span class="chapter-number" th:if="${chapter.id != 0}" th:text="'(챕터 ' + ${chapter.chapterNumber} + ')'"></span>
+        </p>
+        <p class="word-count">포함된 단어 수: <span th:text="${chapter.wordCount}"></span>개</p>
+
+        <div th:if="${chapter.id != 0}" class="btn-group btn-group-sm mt-2" role="group">
+            <a th:href="@{/vocabulary/chapters/{id}/edit(id=${chapter.id})}" class="btn btn-primary">수정</a>
+            <form th:action="@{/vocabulary/chapters/{id}/delete(id=${chapter.id})}" method="post" onsubmit="..." class="ml-2">
+                <button type="submit" class="btn btn-danger">삭제</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

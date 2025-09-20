@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>시험 시작</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body { padding-top: 20px; background-color: #f8f9fa; }
+        .container { max-width: 800px; margin-top: 30px; background-color: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        h1 { color: #28a745; margin-bottom: 30px; font-weight: 600; text-align: center; }
+        .form-check { margin-bottom: 15px; }
+        .word-item { display: flex; align-items: center; margin-bottom: 15px; padding: 10px; border: 1px solid #e0e0e0; border-radius: 5px; background-color: #f8f9fa; }
+        .word-item span { font-weight: bold; margin-right: 15px; flex-shrink: 0; min-width: 150px; }
+        .word-item input { flex-grow: 1; padding: 8px; border-radius: 4px; border: 1px solid #ced4da; }
+        .btn-group-custom { margin-top: 30px; text-align: center; }
+        .alert-warning { text-align: center; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>시험 시작!</h1>
+
+    <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+        <span th:text="${errorMessage}"></span>
+    </div>
+
+    <form th:action="@{/vocabulary/exam/submit-test}" method="post" onsubmit="return confirmEmptyAnswers(event);">
+        <div class="form-group text-center">
+            <h4>어떤 방식으로 시험을 보시겠어요?</h4>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="examType" id="examTypeSpelling" value="SPELLING" checked>
+                <label class="form-check-label" for="examTypeSpelling">뜻 보고 철자 맞추기</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="examType" id="examTypeMeaning" value="MEANING">
+                <label class="form-check-label" for="examTypeMeaning">철자 보고 뜻 맞추기</label>
+            </div>
+        </div>
+        <hr/>
+
+        <h4 class="mb-3">문제를 풀어보세요!</h4>
+        <div th:each="word, stat : ${words}" class="word-item">
+            <input type="hidden" th:name="'wordIds[' + ${stat.index} + ']'" th:value="${word.id}" />
+
+            <span class="exam-question" th:data-spelling="${word.spelling}" th:data-meaning="${word.meaning}">
+                <span th:text="${word.meaning}">단어의 뜻</span>
+            </span>
+
+            <input type="text" th:name="'userAnswers[' + ${word.id} + ']'" class="form-control" placeholder="여기에 답변을 입력하세요">
+        </div>
+
+        <div class="btn-group-custom">
+            <button type="submit" class="btn btn-success btn-lg">시험 종료 및 채점</button>
+            <a href="/vocabulary/exam/select-chapters" class="btn btn-secondary btn-lg ml-2">시험 취소</a>
+        </div>
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const examTypeRadios = document.querySelectorAll('input[name="examType"]');
+        const questionSpans = document.querySelectorAll('.exam-question');
+
+        function updateQuestions() {
+            const selectedType = document.querySelector('input[name="examType"]:checked').value;
+            questionSpans.forEach(span => {
+                if (selectedType === 'SPELLING') {
+                    span.textContent = span.dataset.meaning;
+                } else { // MEANING
+                    span.textContent = span.dataset.spelling;
+                }
+            });
+        }
+
+        examTypeRadios.forEach(radio => {
+            radio.addEventListener('change', updateQuestions);
+        });
+
+        // 페이지 로드 시 초기 질문 업데이트
+        updateQuestions();
+    });
+
+    // 종료 버튼 클릭 시 미입력 필드 확인
+    function confirmEmptyAnswers(event) {
+        const answerInputs = document.querySelectorAll('input[name^="userAnswers["]');
+        let emptyCount = 0;
+        answerInputs.forEach(input => {
+            if (input.value.trim() === '') {
+                emptyCount++;
+            }
+        });
+
+        if (emptyCount > 0) {
+            return confirm(`아직 ${emptyCount}개의 문제가 풀리지 않았습니다. 그래도 시험을 종료하고 채점하시겠습니까?`);
+        }
+        return true;
+    }
+</script>
+</body>
+</html>

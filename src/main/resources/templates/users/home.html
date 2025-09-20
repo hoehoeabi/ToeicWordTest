@@ -1,35 +1,30 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Home</title>
+    <title>홈 페이지</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body { padding-top: 20px; text-align: center; background-color: #f8f9fa; }
+        .container { max-width: 600px; margin-top: 50px; background-color: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        h1 { color: #007bff; margin-bottom: 30px; font-weight: 600; }
+        .btn-custom { margin: 10px; padding: 15px 30px; font-size: 1.2rem; border-radius: 5px; }
+        .btn-logout { margin-top: 30px; }
+    </style>
 </head>
 <body>
-<h1 th:text="${user.nickname} + '님, 환영합니다!'">사용자 이름 환영 메시지</h1>
-
-<hr>
-
-<h3>또 다른 표현 방식:</h3>
-<h1>
-    <span th:text="${user.nickname}"></span>님, 환영합니다!
-</h1>
-
-<h1>[[${user.nickname}]]님, 환영합니다!</h1>
-
 <div class="container">
-    <div>
-        <h1>Hello Spring</h1>
-        <p>회원 기능</p>
-        <p>
-            <a href="/logout">로그 아웃/a>
-            <a href="/members">내 정보 조회</a>
-        </p>
+    <h1 th:text="'환영합니다, ' + ${#authentication.principal.nickname} + '님!'">환영합니다, [닉네임]님!</h1>
+
+    <div class="btn-group-custom">
+        <a href="/vocabulary/exam/start" class="btn btn-success btn-lg btn-custom">시험보기</a>
+        <a href="/vocabulary/chapters" class="btn btn-primary btn-lg btn-custom">내 챕터 목록</a>
     </div>
-</div> <!-- /container -->
 
-<form th:action="@{/api/users/logout}" method="post">
-    <button type="submit">로그아웃</button>
-</form>
-
+    <form th:action="@{/api/users/logout}" method="post" class="btn-logout">
+        <button type="submit" class="btn btn-danger">로그아웃</button>
+    </form>
+</div>
 </body>
 </html>

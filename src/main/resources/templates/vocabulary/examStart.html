@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>시험 유형 선택</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body { padding-top: 20px; text-align: center; background-color: #f8f9fa; }
+        .container { max-width: 600px; margin-top: 50px; background-color: #fff; padding: 40px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        h1 { color: #007bff; margin-bottom: 40px; font-weight: 600; }
+        .form-check { font-size: 1.2rem; margin: 20px; }
+        .btn-custom { margin-top: 30px; padding: 10px 40px; font-size: 1.2rem; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>어떤 방식으로 시험을 보시겠어요?</h1>
+    <form th:action="@{/vocabulary/exam/select-chapters}" method="post">
+        <div class="form-group">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="examType" id="examTypeSpelling" value="SPELLING" checked>
+                <label class="form-check-label" for="examTypeSpelling">뜻 보고 철자 맞추기</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="examType" id="examTypeMeaning" value="MEANING">
+                <label class="form-check-label" for="examTypeMeaning">철자 보고 뜻 맞추기</label>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-success btn-lg btn-custom">다음 (챕터 선택)</button>
+        <a href="/api/users/home" class="btn btn-secondary mt-3">홈으로 돌아가기</a>
+    </form>
+</div>
+</body>
+</html>
