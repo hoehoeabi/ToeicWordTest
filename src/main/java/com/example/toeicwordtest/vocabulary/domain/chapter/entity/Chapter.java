@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "chapter", uniqueConstraints = { // ★ 유니크 제약 조건 추가 (user_id와 chapter_number의 조합)
+@Table(name = "chapter", uniqueConstraints = { //  유니크 제약 조건 추가 (user_id와 chapter_number의 조합)
         @UniqueConstraint(columnNames = {"user_id", "chapterNumber"})
 })
 @Getter

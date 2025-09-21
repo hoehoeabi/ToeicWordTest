@@ -46,11 +46,23 @@ public class User {
     @Builder.Default
     private Set<Role> roles = new HashSet<>();
 
-    // mappedBy에는 조인할 테이블에서 조인할 객체?의 변수명을 적는거임
-    // (주인이 아닌쪽이 mappedBy를 가짐."니가 가지고 있는 그 외래키 주인이 누구야?->Chapter요" 그래서 Chapter가 주인인거임)
-    // 사실 챕터쪽은 일반적으로 비즈니스적인 관점에서, "특정 유저의 특정 챕터 이름"은 그 챕터를 고유하게 식별할 수 있는 자연 키(Natural Key)가 될 수 있다.
-    // 하지만 위의 경우 복합키하나 때문에
-    // 식별자 클래스도 만들어야 하고 구조가 복잡해 지기에 대리키를 기본키로 사용하고 cascade = CascadeType.ALL를 설정 해준다
+    /**
+     * '연관관계의 주인이 아님'을 명시.
+     * 이 관계의 주인은 '다(N)'쪽인 Chapter 엔티티이며, Chapter 엔티티 안에 있는 'user' 필드가 이 관계를 관리.
+     * mappedBy = "user"는 "Chapter 엔티티의 'user' 필드에 의해 매핑되었다"는 의미.
+     *
+     * [키 전략] 비즈니스적으로 (어떤 유저, 어떤 챕터 번호)는 챕터를 식별하는 '자연 키(복합 키)'가 될 수 있다.
+     * 하지만 JPA에서 복합 키를 기본 키(@Id)로 사용하면 @IdClass 등을 만들어야 해서 복잡해지므로,
+     * 보통 간단한 '대리 키(Surrogate Key)'(예: Long id)를 기본 키로 사용.
+     *
+     * [영속성 전이] cascade = CascadeType.ALL은 User의 상태 변화(저장, 삭제 등)를 Chapter에도 전파시키는 설정입니다.
+     * 이는 위에서 설명한 키 전략과는 별개의 개념.
+     *
+     * '고아 객체 제거' 기능. CascadeType.REMOVE와는 다름.
+     * - CascadeType.REMOVE: 부모(User)가 삭제되면 자식(Chapter)도 함께 삭제.
+     * - orphanRemoval=true: 부모의 컬렉션에서 자식을 제거하면 (예: user.getChapters().remove(chapter)),
+     * 부모를 잃은 자식(고아)이 되어 DB에서도 삭제.
+     */
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.LAZY)
     @Builder.Default // 이게 있어야 빌더 만들때 값을 안넣은 상태에서 get해도 null이 아니라 빈 ArrayList가 나옴
     private List<Chapter> chapters = new ArrayList<>();
