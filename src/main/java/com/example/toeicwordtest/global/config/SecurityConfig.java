@@ -26,9 +26,7 @@ public class SecurityConfig {
                                 .requestMatchers("/auth/users/signup", "/auth/users/login","/h2-console/**").permitAll()
                                 .anyRequest().authenticated()
                         )
-                .headers(headers ->
-                        headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)
-                )
+
                 .formLogin(form -> form
                                 .loginPage("/auth/users/login") // 로그인 페이지의 경로
                                 .loginProcessingUrl("/auth/users/login") // 로그인 폼이 제출되는 URL
