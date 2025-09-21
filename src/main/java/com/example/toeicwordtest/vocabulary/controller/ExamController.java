@@ -32,7 +32,7 @@ public class ExamController {
     private final ChapterService chapterService;
     private final ExamService examService;
     private final WrongNoteService wrongNoteService;
-    private final UserRepository userRepository; // User 엔티티 조회를 위해 추가
+    private final UserRepository userRepository;
 
     // 1. 시험 시작 페이지 (시험 종류 선택)
     @GetMapping("/start")
@@ -48,6 +48,8 @@ public class ExamController {
         List<ChapterDto> chapters = chapterService.getAllChaptersForUser(userId);
 
         // 오답노트에 단어가 있으면 '틀린 단어' 가상 챕터 추가
+        // 챕터 리스트 페이지를 조회 할때마다 디비에서 틀린단어 여부를 조회 함
+        // 레디스 같은거로 캐싱하지 않는 이번 프로젝트 특성상 데이터 정합성을 위해 어쩔 수 없음
         int wrongWordsCount = wrongNoteService.getWrongWordsCount(userId);
         if (wrongWordsCount > 0) {
             chapters.add(0, ChapterDto.createWrongNoteChapter(wrongWordsCount));
@@ -117,6 +119,7 @@ public class ExamController {
                              RedirectAttributes redirectAttributes) {
         User user = userRepository.findById(currentUser.getId()).orElseThrow();
         ExamResultDto result = examService.submitExam(user, examForm);
+        // 시험결과를 리다이렉트 할때 같이 보내줌(showExamResultPage의 매개변수를 보면 이해됨)
         redirectAttributes.addFlashAttribute("examResult", result);
         return "redirect:/vocabulary/exam/result";
     }
@@ -131,6 +134,7 @@ public class ExamController {
         return "vocabulary/examResult";
     }
 
+    // 틀린 단어 테스트
     @PostMapping("/start-wrong-note-test")
     public String startWrongNoteTest(@AuthenticationPrincipal CustomUserDetails currentUser,
                                      @RequestParam("examType") String examType,

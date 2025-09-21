@@ -45,23 +45,31 @@ public class ExamService {
      */
     @Transactional
     public ExamResultDto submitExam(User user, ExamForm examForm) {
+        // 시험에 사용된 단어들 id
         List<Long> wordIds = examForm.getWordIds();
+        // 사용자 답안 목록
         Map<Long, String> userAnswers = examForm.getUserAnswers();
 
         if (wordIds == null || wordIds.isEmpty()) {
             throw new IllegalArgumentException("채점할 단어가 없습니다.");
         }
 
+        // 시험에 사용된 단어들 id로 db에서 가져옴(정답 비교를 위해)
         List<Word> examWords = wordRepository.findAllById(wordIds);
+        // 위에서 가져온 단어들 id를 키로 값으로 Word엔티티 자체를 넣어줌
         Map<Long, Word> wordMap = examWords.stream().collect(Collectors.toMap(Word::getId, word -> word));
 
         int correctAnswers = 0;
+        // 채점을 위한 리스트
         List<ExamResultDto.WrongAnswerDetail> wrongAnswerDetails = new ArrayList<>();
 
+        // 시험에 사용된 단어들 id를 하나씩 꺼냄
         for (Long wordId : wordIds) {
+            // 디비에서 가져온 단어 자체 즉 정답을 넣어줌
             Word word = wordMap.get(wordId);
             if (word == null) continue;
 
+            // 단어 id를 기반으로 map에서 사용자가 입력한 정답, db에서 가져온 단어와 비교 함
             String userAnswer = userAnswers.getOrDefault(wordId, "").trim();
             String correctAnswer = examForm.getExamType().equalsIgnoreCase("SPELLING") ?
                     word.getSpelling().trim() : word.getMeaning().trim();
@@ -69,11 +77,12 @@ public class ExamService {
 
             if (isCorrect) {
                 correctAnswers++;
-                // ★ 맞췄을 경우, 오답노트에서 해당 단어를 삭제
+                //  맞췄을 경우, 오답노트에서 해당 단어를 삭제
                 wrongNoteService.removeWrongNoteEntry(user, word);
             } else {
-                // ★ 틀렸을 경우, 오답노트에 해당 단어를 추가
+                //  틀렸을 경우, 오답노트에 해당 단어를 추가
                 wrongNoteService.addWrongNoteEntry(user, word);
+                // 사용자에게 보여줄 틀린단어 및 입력한 값 보여주기 위함
                 wrongAnswerDetails.add(new ExamResultDto.WrongAnswerDetail(
                         word.getId(), word.getSpelling(), word.getMeaning(), userAnswer, correctAnswer));
             }

@@ -24,6 +24,7 @@ public class WrongNoteService {
     private final VocabularyMapper vocabularyMapper;
 
     public void addWrongNoteEntry(User user, Word word) {
+        // 이미 오답노트에 있는 단어면 추가 안함
         if (!wrongNoteEntryRepository.existsByUserAndWord(user, word)) {
             WrongNoteEntry entry = WrongNoteEntry.builder()
                     .user(user)
@@ -59,29 +60,7 @@ public class WrongNoteService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional(readOnly = true)
-    public void printWrongWords(String username) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        List<WrongNoteEntry> entries = wrongNoteEntryRepository.findByUser(user);
-        System.out.println("--- 쿼리 실행 지점 ---");
-        for (WrongNoteEntry entry : entries) {
-            System.out.println("틀린 단어: " + entry.getWord().getSpelling());
-        }
-    }
-
-    @Transactional(readOnly = true)
-    public void printWrongWords_Optimized(String username) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        List<WrongNoteEntry> entries = wrongNoteEntryRepository.findByUserFetchJoinWord(user);
-        System.out.println("--- 쿼리 실행 지점 ---");
-        for (WrongNoteEntry entry : entries) {
-            System.out.println("틀린 단어: " + entry.getWord().getSpelling());
-        }
-    }
-
-    // ★ 추가된 메소드: 특정 유저의 틀린 단어 개수 조회
+    // 특정 유저의 틀린 단어 개수 조회
     @Transactional(readOnly = true)
     public int getWrongWordsCount(Long userId) {
         User user = userRepository.findById(userId)
@@ -89,7 +68,7 @@ public class WrongNoteService {
         return (int) wrongNoteEntryRepository.countByUser(user);
     }
 
-    // ★ 추가된 메소드: 틀린 단어 목록을 상세 보기용 ChapterDto로 변환하여 반환
+    // 틀린 단어 목록을 상세 보기용 ChapterDto로 변환하여 반환
     @Transactional(readOnly = true)
     public ChapterDto getWrongNoteChapter(Long userId) {
         List<Word> wrongWords = getWordsFromWrongNote(userId);

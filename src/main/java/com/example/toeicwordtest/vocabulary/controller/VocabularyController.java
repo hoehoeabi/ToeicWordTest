@@ -59,7 +59,7 @@ public class VocabularyController {
         return "vocabulary/chapterForm";
     }
 
-    // --- 챕터 등록 및 수정 처리 (try-catch 제거) ---
+    // --- 챕터 등록 및 수정 처리  ---
     @PostMapping("/chapters")
     public String saveOrUpdateChapter(@AuthenticationPrincipal CustomUserDetails currentUser,
                                       @ModelAttribute("chapter") ChapterDto chapterDto,

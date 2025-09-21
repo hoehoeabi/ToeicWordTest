@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-import static com.example.toeicwordtest.vocabulary.chapter.entity.QChapter.chapter;
-import static com.example.toeicwordtest.vocabulary.word.entity.QWord.word;
+import static com.example.toeicwordtest.vocabulary.domain.chapter.entity.QChapter.chapter;
+import static com.example.toeicwordtest.vocabulary.domain.word.entity.QWord.word;
 import static com.example.toeicwordtest.auth.user.entity.QUser.user;
 
 

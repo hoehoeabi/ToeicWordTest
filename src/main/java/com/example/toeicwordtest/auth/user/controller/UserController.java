@@ -20,7 +20,7 @@ import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/api/users")
+@RequestMapping("/auth/users")
 @Slf4j
 public class UserController {
 
@@ -55,7 +55,7 @@ public class UserController {
         }
 
         redirectAttributes.addFlashAttribute("success", "성공적으로 회원가입 됐습니다.");
-        return "redirect:/api/users/login";
+        return "redirect:/auth/users/login";
     }
 
     @GetMapping("/login")
@@ -72,7 +72,7 @@ public class UserController {
             model.addAttribute("user", userOptional.get());
             return "users/home";
         }
-        return "redirect:/api/users/login";
+        return "redirect:/auth/users/login";
     }
 
 }

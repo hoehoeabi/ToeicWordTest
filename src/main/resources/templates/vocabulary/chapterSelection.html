@@ -16,6 +16,7 @@
     <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
 
     <form th:action="@{/vocabulary/exam/start-test}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
         <input type="hidden" name="examType" th:value="${examType}" />
 
         <div th:if="${#lists.isEmpty(chapters)}" class="alert alert-info">...</div>

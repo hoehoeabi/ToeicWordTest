@@ -20,6 +20,7 @@
     </div>
 
     <form th:action="@{/vocabulary/chapters}" th:object="${chapter}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
         <input type="hidden" th:field="*{id}" />
 
         <div class="form-group">

@@ -23,21 +23,21 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(authorize -> authorize
-                                .requestMatchers("/api/users/signup", "/api/users/login","/h2-console/**").permitAll()
+                                .requestMatchers("/auth/users/signup", "/auth/users/login","/h2-console/**").permitAll()
                                 .anyRequest().authenticated()
                         )
                 .headers(headers ->
                         headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)
                 )
                 .formLogin(form -> form
-                                .loginPage("/api/users/login") // 로그인 페이지의 경로
-                                .loginProcessingUrl("/api/users/login") // 로그인 폼이 제출되는 URL
-                                .defaultSuccessUrl("/api/users/home")
+                                .loginPage("/auth/users/login") // 로그인 페이지의 경로
+                                .loginProcessingUrl("/auth/users/login") // 로그인 폼이 제출되는 URL
+                                .defaultSuccessUrl("/auth/users/home")
                                 .permitAll()
                         )
                 .logout(logout -> logout
-                        .logoutUrl("/api/users/logout") // 로그아웃을 처리할 URL
-                        .logoutSuccessUrl("/api/users/login") // 로그아웃 성공 후 이동할 페이지
+                        .logoutUrl("/auth/users/logout") // 로그아웃을 처리할 URL
+                        .logoutSuccessUrl("/auth/users/login") // 로그아웃 성공 후 이동할 페이지
                         .invalidateHttpSession(true)      // HTTP 세션을 무효화 >> HttpSession 폐기
                         .deleteCookies("JSESSIONID")      // JSESSIONID 쿠키 삭제
                         .permitAll()
@@ -48,8 +48,8 @@ public class SecurityConfig {
                         // 동시 로그인을 차단
                         .maxSessionsPreventsLogin(true)
                 )
-                .userDetailsService(customUserDetailsService)
-                .csrf(csrf -> csrf.disable());
+                .userDetailsService(customUserDetailsService);
+                //.csrf(csrf -> csrf.disable());
 
         return http.build();
     }

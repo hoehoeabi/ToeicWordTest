@@ -22,7 +22,8 @@
         <a href="/vocabulary/chapters" class="btn btn-primary btn-lg btn-custom">내 챕터 목록</a>
     </div>
 
-    <form th:action="@{/api/users/logout}" method="post" class="btn-logout">
+    <form th:action="@{/auth/users/logout}" method="post" class="btn-logout">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
         <button type="submit" class="btn btn-danger">로그아웃</button>
     </form>
 </div>
