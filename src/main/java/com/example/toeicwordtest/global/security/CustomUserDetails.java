@@ -1,6 +1,6 @@
 package com.example.toeicwordtest.global.security;
 
-import com.example.toeicwordtest.domain.role.entity.Role;
+import com.example.toeicwordtest.auth.role.entity.Role;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -12,13 +12,16 @@ import java.util.stream.Collectors;
 
 public class CustomUserDetails implements UserDetails {
 
+    @Getter
+    private final Long id;
     private final String username;
     private final String password;
     @Getter
     private final String nickname;
     private final Collection<? extends GrantedAuthority> authorities;
 
-    public CustomUserDetails(String username, String password, String nickname, Set<Role> roles) {
+    public CustomUserDetails(Long id,String username, String password, String nickname, Set<Role> roles) {
+        this.id = id;
         this.username = username;
         this.password = password;
         this.nickname = nickname;

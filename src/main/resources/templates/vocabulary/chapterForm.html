@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${chapter.id == null ? '새 챕터 등록' : '챕터 수정'}"></title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body { padding-top: 20px; }
+        .container { max-width: 800px; }
+        .word-entry { display: flex; align-items: center; margin-bottom: 10px; }
+        .word-entry input { margin-right: 10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2 class="mb-4" th:text="${chapter.id == null ? '새 챕터 등록' : '챕터 수정'}"></h2>
+
+    <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+        <span th:text="${errorMessage}"></span>
+    </div>
+
+    <form th:action="@{/vocabulary/chapters}" th:object="${chapter}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <input type="hidden" th:field="*{id}" />
+
+        <div class="form-group">
+            <label for="chapterNumber">챕터 번호:</label>
+            <input type="number" id="chapterNumber" th:field="*{chapterNumber}" class="form-control" required min="1" />
+        </div>
+
+        <div class="form-group">
+            <label for="title">챕터 제목:</label>
+            <input type="text" id="title" th:field="*{title}" class="form-control" required maxlength="100" />
+        </div>
+
+        <hr>
+        <h3>단어 목록</h3>
+        <div id="wordsContainer">
+            <div th:each="word, stat : *{words}" class="word-entry">
+                <input type="hidden" th:field="*{words[__${stat.index}__].id}" />
+                <input type="text" th:field="*{words[__${stat.index}__].spelling}" placeholder="영어 단어" class="form-control" required />
+                <input type="text" th:field="*{words[__${stat.index}__].meaning}" placeholder="한글 의미" class="form-control" required />
+                <button type="button" class="btn btn-sm btn-outline-danger ml-2 remove-word-btn">삭제</button>
+            </div>
+        </div>
+        <button type="button" id="addWordBtn" class="btn btn-info mt-3">단어 추가</button>
+
+        <hr>
+        <button type="submit" class="btn btn-success" th:text="${chapter.id == null ? '챕터 등록' : '챕터 수정'}"></button>
+        <a th:href="${chapter.id == null ? '/vocabulary/chapters' : '/vocabulary/chapters/' + chapter.id}" class="btn btn-secondary">취소</a>
+    </form>
+</div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    document.addEventListener('DOMContentLoaded', function() {
+        const wordsContainer = document.getElementById('wordsContainer');
+        const addWordBtn = document.getElementById('addWordBtn');
+
+        let wordIndex = /*[[${#lists.size(chapter.words)}]]*/ 0; // Thymeleaf에서 현재 단어 개수를 가져옴
+
+        const createWordInput = (id, spelling, meaning) => {
+            const div = document.createElement('div');
+            div.className = 'word-entry';
+
+            const hiddenId = document.createElement('input');
+            hiddenId.type = 'hidden';
+            hiddenId.name = `words[${wordIndex}].id`;
+            hiddenId.value = id || '';
+            div.appendChild(hiddenId);
+
+            const spellingInput = document.createElement('input');
+            spellingInput.type = 'text';
+            spellingInput.name = `words[${wordIndex}].spelling`;
+            spellingInput.placeholder = '영어 단어';
+            spellingInput.className = 'form-control';
+            spellingInput.required = true;
+            spellingInput.value = spelling || '';
+            div.appendChild(spellingInput);
+
+            const meaningInput = document.createElement('input');
+            meaningInput.type = 'text';
+            meaningInput.name = `words[${wordIndex}].meaning`;
+            meaningInput.placeholder = '한글 의미';
+            meaningInput.className = 'form-control';
+            meaningInput.required = true;
+            meaningInput.value = meaning || '';
+            div.appendChild(meaningInput);
+
+            const removeBtn = document.createElement('button');
+            removeBtn.type = 'button';
+            removeBtn.className = 'btn btn-sm btn-outline-danger ml-2 remove-word-btn';
+            removeBtn.textContent = '삭제';
+            removeBtn.addEventListener('click', () => {
+                div.remove();
+                updateWordIndexes(); // 인덱스 재정렬
+            });
+            div.appendChild(removeBtn);
+
+            wordIndex++;
+            return div;
+        };
+
+        const updateWordIndexes = () => {
+            const allWordEntries = wordsContainer.querySelectorAll('.word-entry');
+            allWordEntries.forEach((entry, idx) => {
+                entry.querySelector('input[type="hidden"][name^="words["]').name = `words[${idx}].id`;
+                entry.querySelector('input[name^="words["][placeholder="영어 단어"]').name = `words[${idx}].spelling`;
+                entry.querySelector('input[name^="words["][placeholder="한글 의미"]').name = `words[${idx}].meaning`;
+            });
+            wordIndex = allWordEntries.length; // 다음 추가될 단어의 인덱스 업데이트
+        };
+
+        // 기존 단어들의 삭제 버튼 이벤트 리스너 추가
+        wordsContainer.querySelectorAll('.remove-word-btn').forEach(button => {
+            button.addEventListener('click', (event) => {
+                event.target.closest('.word-entry').remove();
+                updateWordIndexes();
+            });
+        });
+
+        addWordBtn.addEventListener('click', () => {
+            const newWordEntry = createWordInput(null, '', ''); // ID, spelling, meaning 모두 비어있음
+            wordsContainer.appendChild(newWordEntry);
+        });
+
+        // 챕터 등록/수정 폼 제출 시 유효성 검사 등 추가 로직 필요 시 여기에 구현
+
+        // 폼 로드 시 단어가 하나도 없으면 빈 단어 필드 하나 추가
+        if (wordsContainer.children.length === 0) {
+            wordsContainer.appendChild(createWordInput(null, '', ''));
+        }
+    });
+    /*]]>*/
+</script>
+</body>
+</html>

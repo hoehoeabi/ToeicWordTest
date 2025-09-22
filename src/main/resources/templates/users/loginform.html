@@ -1,21 +1,123 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>로그인 페이지</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #e9ecef; /* Light gray background */
+        }
+
+        .login-container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px; /* Max width for the form */
+        }
+
+        h1 {
+            color: #007bff; /* Primary blue color */
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        hr {
+            border-top: 1px solid #e0e0e0;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            box-sizing: border-box; /* Include padding in width */
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: #80bdff;
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff; /* Primary blue */
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        button:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+
+        .signup-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .signup-link:hover {
+            text-decoration: underline;
+        }
+
+        .error {
+            color: #dc3545; /* Bootstrap danger color */
+            font-size: 0.9em;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+    </style>
 </head>
 <body>
-<h1>로그인 페이지</h1>
-<hr/>
-<div th:if="${param.error}">
-    <p class="error">아이디 또는 비밀번호가 올바르지 않습니다.</p>
+<div class="login-container">
+    <h1>로그인</h1>
+    <hr/>
+    <div th:if="${param.error}" class="error">
+        <p>아이디 또는 비밀번호가 올바르지 않습니다.</p>
+    </div>
+    <form th:action="@{/auth/users/login}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <div class="form-group">
+            <input type="text" name="username" class="form-control" placeholder="아이디" required/>
+        </div>
+        <div class="form-group">
+            <input type="password" name="password" class="form-control" placeholder="비밀번호" required/>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">로그인</button>
+    </form>
+    <a th:href="@{/auth/users/signup}" class="signup-link">회원가입</a>
 </div>
-<!-- 시큐리티는 x-www-form-url-encoded 타입만 인식 -->
-<form th:action="@{/api/users/login}" method="post">
-    <input type="text" name="username" placeholder="아이디"/>
-    <input type="password" name="password" placeholder="비밀번호"/>
-    <button>로그인</button>
-</form>
-<a href="/api/users/signup">회원가입</a>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

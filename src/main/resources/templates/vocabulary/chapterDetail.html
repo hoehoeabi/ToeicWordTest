@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${chapter.title} + ' 상세 보기'"></title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body { padding-top: 20px; }
+        .container { max-width: 800px; }
+        h2 { color: #007bff; margin-bottom: 25px; }
+        h3 { border-bottom: 2px solid #e9ecef; padding-bottom: 10px; margin-top: 30px; margin-bottom: 20px; }
+        .word-card { border: 1px solid #e0e0e0; border-radius: 5px; padding: 10px; margin-bottom: 8px; background-color: #f8f9fa; }
+        .word-card p { margin-bottom: 0; }
+        .word-spelling { font-weight: bold; color: #343a40; }
+        .word-meaning { color: #6c757d; font-style: italic; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2 class="mb-4" th:text="${chapter.title} + (${chapter.id != 0} ? ' (챕터 ' + ${chapter.chapterNumber} + ')' : '')"></h2>
+
+    <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+        <span th:text="${errorMessage}"></span>
+    </div>
+
+    <div th:if="${#lists.isEmpty(chapter.words)}" class="alert alert-info">
+        이 챕터에는 아직 단어가 등록되지 않았습니다.
+    </div>
+
+    <div th:unless="${#lists.isEmpty(chapter.words)}">
+        <h3 th:text="'포함된 단어들 (' + ${chapter.wordCount} + '개)'"></h3>
+        <div th:each="word : ${chapter.words}" class="word-card">
+            <p class="word-spelling" th:text="${word.spelling}"></p>
+            <p class="word-meaning" th:text="${word.meaning}"></p>
+        </div>
+    </div>
+
+    <hr class="my-4">
+    <a th:if="${chapter.id != 0}" th:href="@{/vocabulary/chapters/{id}/edit(id=${chapter.id})}" class="btn btn-primary">챕터 수정</a>
+
+    <form th:if="${chapter.id == 0 and not #lists.isEmpty(chapter.words)}"
+          th:action="@{/vocabulary/exam/start}" method="get" style="display: inline;">
+        <input type="hidden" name="source" value="wrong_notes" />
+        <button type="submit" class="btn btn-warning">이 단어들로 시험보기</button>
+    </form>
+
+    <a href="/vocabulary/chapters" class="btn btn-secondary ml-2">목록으로 돌아가기</a>
+</div>
+</body>
+</html>

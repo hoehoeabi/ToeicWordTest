@@ -1,90 +1,140 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>회원가입 페이지</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f4f4f4;
+            background-color: #e9ecef; /* Light gray background */
+        }
+
+        .signup-container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px; /* Max width for the form */
         }
 
         h1 {
-            color: #333;
+            color: #28a745; /* Bootstrap success color */
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 600;
         }
 
-        form {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        hr {
+            border-top: 1px solid #e0e0e0;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
         }
 
         label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #343a40;
         }
 
         input {
             width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
+            padding: 12px 15px;
+            border: 1px solid #ced4da;
             border-radius: 5px;
+            box-sizing: border-box;
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        input:focus {
+            border-color: #28a745; /* Success color on focus */
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
         }
 
         button {
             width: 100%;
-            padding: 10px;
-            background-color: #5cb85c;
+            padding: 12px;
+            background-color: #28a745; /* Bootstrap success color */
             border: none;
             border-radius: 5px;
             color: #fff;
+            font-size: 1.1em;
             font-weight: bold;
             cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+            margin-top: 15px;
         }
 
         button:hover {
-            background-color: #4cae4c;
+            background-color: #218838; /* Darker green on hover */
         }
 
-        .error {
-            color: red;
+        .error-message-box {
+            color: #dc3545; /* Bootstrap danger color */
             font-size: 0.9em;
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+        }
+
+        .error-message-box ul {
+            padding-left: 20px;
+            margin-bottom: 0;
         }
     </style>
 </head>
 <body>
-<form th:action="@{/api/users/signup}" th:object="${user}" method="post">
-    <h1>회원가입 페이지</h1>
+<div class="signup-container">
+    <h1>회원가입</h1>
     <hr/>
+    <form th:action="@{/auth/users/signup}" th:object="${user}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <div class="form-group">
+            <label for="username">아이디</label>
+            <input type="text" id="username" th:field="*{username}" class="form-control" placeholder="아이디를 입력하세요" required/>
+        </div>
 
-    <label for="username">아이디</label>
-    <input type="text" th:field="*{username}" placeholder="아이디" required/>
+        <div class="form-group">
+            <label for="nickname">닉네임</label>
+            <input type="text" id="nickname" th:field="*{nickname}" class="form-control" placeholder="닉네임을 입력하세요" required/>
+        </div>
 
-    <label for="nickname">닉네임</label>
-    <input type="text" th:field="*{nickname}" placeholder="닉네임" required/>
+        <div class="form-group">
+            <label for="password">비밀번호</label>
+            <input type="password" id="password" th:field="*{password}" class="form-control" placeholder="비밀번호를 입력하세요" required/>
+        </div>
 
-    <label for="password">비밀번호</label>
-    <input type="password" th:field="*{password}" placeholder="비밀번호" required/>
+        <div class="form-group">
+            <label for="passwordCheck">비밀번호 확인</label>
+            <input type="password" id="passwordCheck" th:field="*{passwordCheck}" class="form-control" placeholder="비밀번호를 다시 입력하세요" required/>
+        </div>
 
-    <label for="passwordcheck">비밀번호 확인</label>
-    <input type="password" th:field="*{passwordCheck}" placeholder="비밀번호 확인" required/>
+        <div th:if="${errors != null && !errors.isEmpty()}" class="error-message-box">
+            <ul>
+                <li th:each="err : ${errors}" th:text="${err}"></li>
+            </ul>
+        </div>
 
-    <div th:if="${errors != null && !errors.isEmpty()}" class="error">
-        <ul>
-            <li th:each="err : ${errors}" th:text="${err}"></li>
-        </ul>
-    </div>
+        <button type="submit" class="btn btn-success btn-block">회원가입</button>
+    </form>
+</div>
 
-    <button type="submit">회원가입</button>
-</form>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
